@@ -1,0 +1,26 @@
+mode: atomic
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:9.70,11.16 2 3
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:11.16,13.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:14.2,15.16 2 2
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:15.16,17.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:18.2,18.66 1 1
+github.com/KOMKZ/go-yogan-domain-auth/provider/do/auth_service_provider.go:21.70,23.2 1 2
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:15.102,20.2 1 13
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:29.96,31.16 2 5
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:31.16,33.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:34.2,34.17 1 4
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:34.17,36.3 1 2
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:38.2,38.64 1 2
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:38.64,40.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:42.2,45.8 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:50.95,52.16 2 4
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:52.16,54.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:55.2,55.17 1 3
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:55.17,57.3 1 2
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:58.2,58.18 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:62.80,64.16 2 3
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:64.16,66.3 1 1
+github.com/KOMKZ/go-yogan-domain-auth/service/auth_service.go:67.2,67.25 1 2
+github.com/KOMKZ/go-yogan-domain-auth/password_hasher.go:16.38,18.2 1 9
+github.com/KOMKZ/go-yogan-domain-auth/password_hasher.go:20.62,23.2 2 7
+github.com/KOMKZ/go-yogan-domain-auth/password_hasher.go:25.59,28.2 2 5

@@ -25,10 +25,11 @@ type LoginResult struct {
 }
 
 // Login 验证凭证（email + password），不包含业务状态检查（如禁用），业务状态由调用方处理
+// 系统错误（如 DB 故障）原样返回，仅凭证无效时返回 ErrInvalidCredentials
 func (s *AuthService) Login(ctx context.Context, email, password string) (*LoginResult, error) {
 	user, err := s.userProvider.FindByEmail(ctx, email)
 	if err != nil {
-		return nil, autherrors.ErrInvalidCredentials
+		return nil, err
 	}
 	if user == nil {
 		return nil, autherrors.ErrInvalidCredentials
@@ -45,10 +46,11 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 }
 
 // GetUserByID 通过 ID 获取可认证用户
+// 系统错误原样返回，仅用户确实不存在时返回 ErrUserNotFound
 func (s *AuthService) GetUserByID(ctx context.Context, id uint) (auth.Authenticatable, error) {
 	user, err := s.userProvider.FindByID(ctx, id)
 	if err != nil {
-		return nil, autherrors.ErrUserNotFound
+		return nil, err
 	}
 	if user == nil {
 		return nil, autherrors.ErrUserNotFound
