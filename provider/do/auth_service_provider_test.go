@@ -1,4 +1,4 @@
-package providerdo
+package do
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 
 	auth "github.com/KOMKZ/go-yogan-domain-auth"
 	"github.com/KOMKZ/go-yogan-domain-auth/service"
+	"github.com/KOMKZ/go-yogan-framework/logger"
 	"github.com/samber/do/v2"
 )
 
@@ -69,6 +70,7 @@ func TestProvideBcryptHasher(t *testing.T) {
 
 func TestProvideAuthService(t *testing.T) {
 	injector := do.New()
+	do.ProvideNamedValue(injector, "auth", logger.GetLogger("auth_test"))
 	do.Provide(injector, newProviderMockUserProvider)
 	do.Provide(injector, ProvideBcryptHasher)
 	do.Provide(injector, ProvideAuthService)
@@ -92,6 +94,7 @@ func TestProvideAuthService(t *testing.T) {
 
 func TestProvideAuthService_MissingUserProvider(t *testing.T) {
 	injector := do.New()
+	do.ProvideNamedValue(injector, "auth", logger.GetLogger("auth_test"))
 	do.Provide(injector, ProvideBcryptHasher)
 	do.Provide(injector, ProvideAuthService)
 
@@ -103,6 +106,7 @@ func TestProvideAuthService_MissingUserProvider(t *testing.T) {
 
 func TestProvideAuthService_MissingPasswordHasher(t *testing.T) {
 	injector := do.New()
+	do.ProvideNamedValue(injector, "auth", logger.GetLogger("auth_test"))
 	do.Provide(injector, newProviderMockUserProvider)
 	do.Provide(injector, ProvideAuthService)
 

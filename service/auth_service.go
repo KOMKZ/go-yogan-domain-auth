@@ -5,17 +5,21 @@ import (
 
 	auth "github.com/KOMKZ/go-yogan-domain-auth"
 	autherrors "github.com/KOMKZ/go-yogan-domain-auth/errors"
+	"github.com/KOMKZ/go-yogan-framework/logger"
+	"go.uber.org/zap"
 )
 
 type AuthService struct {
 	userProvider   auth.UserProvider
 	passwordHasher auth.PasswordHasher
+	logger         *logger.CtxZapLogger
 }
 
-func NewAuthService(userProvider auth.UserProvider, passwordHasher auth.PasswordHasher) *AuthService {
+func NewAuthService(userProvider auth.UserProvider, passwordHasher auth.PasswordHasher, log *logger.CtxZapLogger) *AuthService {
 	return &AuthService{
 		userProvider:   userProvider,
 		passwordHasher: passwordHasher,
+		logger:         log,
 	}
 }
 
@@ -36,9 +40,11 @@ func (s *AuthService) Login(ctx context.Context, email, password string) (*Login
 	}
 
 	if !s.passwordHasher.Verify(password, user.GetPasswordHash()) {
+		s.logger.WarnCtx(ctx, "login failed: invalid password", zap.String("email", email))
 		return nil, autherrors.ErrInvalidCredentials
 	}
 
+	s.logger.InfoCtx(ctx, "login success", zap.Uint("user_id", user.GetID()), zap.String("email", email))
 	return &LoginResult{
 		UserID: user.GetID(),
 		Email:  user.GetEmail(),

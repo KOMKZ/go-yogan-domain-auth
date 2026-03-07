@@ -7,6 +7,7 @@ import (
 
 	auth "github.com/KOMKZ/go-yogan-domain-auth"
 	autherrors "github.com/KOMKZ/go-yogan-domain-auth/errors"
+	"github.com/KOMKZ/go-yogan-framework/logger"
 )
 
 // mockUser implements auth.Authenticatable
@@ -83,7 +84,7 @@ func (m *mockPasswordHasher) Verify(password, hash string) bool {
 func TestNewAuthService(t *testing.T) {
 	provider := newMockUserProvider()
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 	if svc == nil {
 		t.Fatal("NewAuthService returned nil")
 	}
@@ -95,7 +96,7 @@ func TestAuthService_Login_Success(t *testing.T) {
 	provider.addUser(user)
 
 	hasher := &mockPasswordHasher{shouldVerify: true}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	result, err := svc.Login(context.Background(), "test@example.com", "password")
 	if err != nil {
@@ -115,7 +116,7 @@ func TestAuthService_Login_Success(t *testing.T) {
 func TestAuthService_Login_UserNotFound(t *testing.T) {
 	provider := newMockUserProvider()
 	hasher := &mockPasswordHasher{shouldVerify: true}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.Login(context.Background(), "nonexistent@example.com", "password")
 	if err != autherrors.ErrInvalidCredentials {
@@ -128,7 +129,7 @@ func TestAuthService_Login_FindByEmailReturnsError(t *testing.T) {
 	dbErr := errors.New("db error")
 	provider.err = dbErr
 	hasher := &mockPasswordHasher{shouldVerify: true}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.Login(context.Background(), "test@example.com", "password")
 	if err != dbErr {
@@ -140,7 +141,7 @@ func TestAuthService_Login_FindByEmailReturnsNil(t *testing.T) {
 	provider := newMockUserProvider()
 	// Don't add any users - FindByEmail returns (nil, nil) for unknown email
 	hasher := &mockPasswordHasher{shouldVerify: true}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.Login(context.Background(), "unknown@example.com", "password")
 	if err != autherrors.ErrInvalidCredentials {
@@ -154,7 +155,7 @@ func TestAuthService_Login_PasswordMismatch(t *testing.T) {
 	provider.addUser(user)
 
 	hasher := &mockPasswordHasher{shouldVerify: false}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.Login(context.Background(), "test@example.com", "wrongpassword")
 	if err != autherrors.ErrInvalidCredentials {
@@ -168,7 +169,7 @@ func TestAuthService_GetUserByID_Success(t *testing.T) {
 	provider.addUser(user)
 
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	got, err := svc.GetUserByID(context.Background(), 42)
 	if err != nil {
@@ -188,7 +189,7 @@ func TestAuthService_GetUserByID_Success(t *testing.T) {
 func TestAuthService_GetUserByID_UserNotFound(t *testing.T) {
 	provider := newMockUserProvider()
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.GetUserByID(context.Background(), 999)
 	if err != autherrors.ErrUserNotFound {
@@ -201,7 +202,7 @@ func TestAuthService_GetUserByID_FindByIDReturnsError(t *testing.T) {
 	dbErr := errors.New("db error")
 	provider.err = dbErr
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.GetUserByID(context.Background(), 1)
 	if err != dbErr {
@@ -213,7 +214,7 @@ func TestAuthService_GetUserByID_FindByIDReturnsNil(t *testing.T) {
 	provider := newMockUserProvider()
 	// Empty provider, FindByID returns (nil, nil)
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	_, err := svc.GetUserByID(context.Background(), 1)
 	if err != autherrors.ErrUserNotFound {
@@ -227,7 +228,7 @@ func TestAuthService_ValidateUser_Success(t *testing.T) {
 	provider.addUser(user)
 
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	ok, err := svc.ValidateUser(context.Background(), 1)
 	if err != nil {
@@ -241,7 +242,7 @@ func TestAuthService_ValidateUser_Success(t *testing.T) {
 func TestAuthService_ValidateUser_UserNotFound(t *testing.T) {
 	provider := newMockUserProvider()
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	ok, err := svc.ValidateUser(context.Background(), 999)
 	if err != nil {
@@ -256,7 +257,7 @@ func TestAuthService_ValidateUser_ProviderError(t *testing.T) {
 	provider := newMockUserProvider()
 	provider.err = errors.New("db connection failed")
 	hasher := &mockPasswordHasher{}
-	svc := NewAuthService(provider, hasher)
+	svc := NewAuthService(provider, hasher, logger.GetLogger("auth_test"))
 
 	ok, err := svc.ValidateUser(context.Background(), 1)
 	if err == nil {
