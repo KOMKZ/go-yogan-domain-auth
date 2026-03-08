@@ -1,0 +1,2 @@
+{"level":"info","time":"2026-03-07T22:54:47.680+0800","caller":"service/auth_service.go:47","msg":"login success","module":"auth_test","app_name":"","user_id":1,"email":"test@example.com"}
+{"level":"warn","time":"2026-03-07T22:54:47.680+0800","caller":"service/auth_service.go:43","msg":"login failed: invalid password","module":"auth_test","app_name":"","email":"test@example.com"}
